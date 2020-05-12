@@ -1,6 +1,5 @@
-import Phaser from 'phaser';
+import 'phaser';
 
-// declare var Phaser: any;
 export default class Game extends Phaser.Scene {
     introText: any;
     objects: {

@@ -1,20 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Phaser from 'phaser';
 import Game from './Game';
 
 function Canvas() {
-    const [config] = useState(() => {
-       return {
-            type: Phaser.AUTO,
-            width: 500,
-            height: 500,
-            parent: 'phaser-canvas',
-            scene: [
-                Game
-            ]
-        }}
-    )
-
+    const config: Phaser.Types.Core.GameConfig = {
+        type: Phaser.AUTO,
+        width: 500,
+        height: 500,
+        parent: 'phaser-canvas',
+        scene: [
+            Game
+        ]
+    }
+   
     useEffect(() => {
         new Phaser.Game(config);
     }, [config])
