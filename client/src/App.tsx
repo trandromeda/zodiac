@@ -1,18 +1,15 @@
-import React from "react";
-import "./App.css";
+import React from 'react';
+import './App.css';
 
-import Canvas from "./components/Canvas";
-import Memory from "./components/Memory";
+// import Canvas from "./components/Canvas";
+import Memory from './components/Memory';
+import Board from './components/Board';
 
 function App() {
     return (
         <div className="App">
-            <h4>I'm making a game!</h4>
-
-            <Canvas />
-
-            <hr />
-
+            {/* <Canvas /> */}
+            <Board />
             <Memory />
         </div>
     );
