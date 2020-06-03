@@ -1,16 +1,22 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
 
 // import Canvas from "./components/Canvas";
 import Memory from './components/Memory';
-import Board from './components/Board';
+import Details from './components/Details';
 
 function App() {
     return (
-        <div className="App">
+        <div className="app">
+            <h1>Zodiac</h1>
             {/* <Canvas /> */}
-            <Board />
-            <Memory />
+            <div className="app__details">
+                <Details />
+            </div>
+
+            <div className="app__board">
+                <Memory />
+            </div>
         </div>
     );
 }

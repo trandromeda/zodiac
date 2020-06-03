@@ -11,8 +11,9 @@ function PlayerName() {
             if (playerName) setShowName(true);
         });
     };
+
     if (showName) {
-        return <h2>Player: {name}</h2>;
+        return <h2>Welcome, {name}</h2>;
     } else {
         return (
             <div>
