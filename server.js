@@ -8,6 +8,8 @@ const players = [];
 io.on('connection', (socket) => {
     console.log(`A user connected: ${socket.id}`);
 
+    io.emit('currentPlayers', players);
+
     socket.on('newPlayer', (playerName, callback) => {
         if (_.find(players, { id: socket.id })) return;
         players.push({
@@ -15,6 +17,7 @@ io.on('connection', (socket) => {
             id: socket.id,
         });
         callback(playerName);
+        io.emit('currentPlayers', players);
     });
 
     socket.on('random', function () {
