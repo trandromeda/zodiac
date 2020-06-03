@@ -1,0 +1,18 @@
+.app {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1em 2em;
+
+    h1 {
+        width: 100%;
+        text-align: center;
+    }
+
+    .app__details {
+        flex: 1 0 30%;
+    }
+
+    .app__board {
+        flex: 1 0 auto;
+    }
+}
