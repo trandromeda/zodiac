@@ -1,6 +1,6 @@
 .app {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     padding: 1em 2em;
 
     h1 {
@@ -9,7 +9,7 @@
     }
 
     .app__details {
-        flex: 1 0 30%;
+        flex: 1 0 15%;
     }
 
     .app__board {
@@ -17,6 +17,3 @@
     }
 }
 
-g.hexagon {
-    fill: rgba(0,255,125, 0.6);
-}
