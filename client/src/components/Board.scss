@@ -1,0 +1,22 @@
+.board {
+    display: flex;
+    justify-content: center;
+}
+
+g.hexagon {
+    fill: rgba(0,255,255, 0.4);
+    // stroke: black;
+    // stroke-width: 0.2;
+}
+
+g.highlight g.hexagon {
+    fill: red;
+}
+
+g text {
+    font-size: 0.1em;
+    stroke: none;
+    fill: black;
+    fill-opacity: 0.7;
+    transition: fill-opacity .5s;
+}
