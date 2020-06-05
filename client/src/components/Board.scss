@@ -1,22 +1,32 @@
 .board {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.board__details {
+    margin: 1em 0;
+}
+
+.board__grid {
+    flex: 1 0 auto;
+    min-height: 50vh;
+    width: 100%;
+    max-width: 850px;
 }
 
 g.hexagon {
-    fill: rgba(0,255,255, 0.4);
-    // stroke: black;
-    // stroke-width: 0.2;
+    fill: rgba(0, 0, 0, 0.1);
 }
 
 g.highlight g.hexagon {
-    fill: red;
+    fill: rgba(0, 0, 0, 0.8);
 }
 
 g text {
-    font-size: 0.1em;
+    font-size: 0.13em;
     stroke: none;
-    fill: black;
-    fill-opacity: 0.7;
-    transition: fill-opacity .5s;
+    fill: white;
+    fill-opacity: 1;
+    transition: fill-opacity 0.5s;
 }
