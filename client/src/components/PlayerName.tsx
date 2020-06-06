@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FormEvent } from 'react';
+import React, { useState, FormEvent } from 'react';
 import socket from '../utils/socket';
 
 function PlayerName() {

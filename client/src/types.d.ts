@@ -1,0 +1,1 @@
+declare module '@trandromeda/react-hexgrid';
