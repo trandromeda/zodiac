@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Details from './components/Details';
-import Board from './components/Board';
+import Board from './components/board/Board';
 
 import './App.scss';
 

@@ -4,7 +4,7 @@ import { HexUtils } from '@trandromeda/react-hexgrid';
 export interface IHex {
     q: number;
     r: number;
-    s?: number;
+    s: number;
 }
 
 export interface IMemoryHex extends IHex {
