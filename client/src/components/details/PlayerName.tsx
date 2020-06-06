@@ -1,5 +1,5 @@
 import React, { useState, FormEvent } from 'react';
-import socket from '../utils/socket';
+import socket from 'src/utils/socket';
 
 function PlayerName() {
     const [name, setName] = useState('');
@@ -20,12 +20,7 @@ function PlayerName() {
                 <form onSubmit={handleSubmit}>
                     <label>
                         Name:
-                        <input
-                            type="text"
-                            name="name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        ></input>
+                        <input type="text" name="name" value={name} onChange={(e) => setName(e.target.value)}></input>
                         <input type="submit" value="OK"></input>
                     </label>
                 </form>

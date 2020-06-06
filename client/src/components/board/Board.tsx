@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { HexGrid, Layout, Hexagon, Text } from '@trandromeda/react-hexgrid';
 import { find } from 'lodash';
 
-import { useBoardReducer } from 'src/components/board/BoardReducer';
+import { useBoardReducer } from 'src/components/board/board-reducer';
 import { IHex, IMemoryHex } from 'src/utils/BoardUtils';
 
 import './Board.scss';

@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import socket from '../utils/socket';
+import socket from 'src/utils/socket';
 
 import PlayerName from './PlayerName';
+import Archetype from 'src/components/archetype/Archetype';
 import './Details.scss';
+import { IArchetype } from '../archetype/archetype.model';
 
-function Details() {
+type Props = {
+    archetypes: any;
+};
+
+function Details(props: Props) {
     const [players, setPlayers] = useState([{ playerName: '', id: '' }]);
 
     useEffect(() => {
-        socket.on(
-            'currentPlayers',
-            (playerNames: { playerName: string; id: string }[]) => {
-                if (playerNames.length) setPlayers(playerNames);
-            }
-        );
+        socket.on('currentPlayers', (playerNames: { playerName: string; id: string }[]) => {
+            if (playerNames.length) setPlayers(playerNames);
+        });
     }, []);
 
     return (
@@ -31,6 +34,11 @@ function Details() {
                     </ul>
                 </div>
             )}
+            <div>
+                {props.archetypes.map((archetype: IArchetype) => {
+                    return <Archetype key={archetype.id} archetype={archetype} />;
+                })}
+            </div>
         </div>
     );
 }
