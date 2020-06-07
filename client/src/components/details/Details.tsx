@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import socket from 'src/utils/socket';
+import './Details.scss';
 
 import PlayerName from './PlayerName';
 import Archetype from 'src/components/archetype/Archetype';
-import './Details.scss';
+import { GameStore } from 'src/store';
 import { IArchetype } from '../archetype/archetype.model';
 
 type Props = {
@@ -12,6 +13,8 @@ type Props = {
 
 function Details(props: Props) {
     const [players, setPlayers] = useState([{ playerName: '', id: '' }]);
+    const [gameState, gameDispatch] = useContext(GameStore);
+    console.log(gameState);
 
     useEffect(() => {
         socket.on('currentPlayers', (playerNames: { playerName: string; id: string }[]) => {

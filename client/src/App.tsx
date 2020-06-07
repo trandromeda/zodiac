@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import Details from './components/details/Details';
 import Board from './components/board/Board';
 
 import Archetype from 'src/components/archetype/archetype.model';
 import { archetypes } from 'src/data/archetypes';
+
+import { GameStoreProvider } from 'src/store';
 
 import './App.scss';
 
@@ -14,19 +16,18 @@ function generateArchetypes() {
 
 function App() {
     const [archetypes] = useState(generateArchetypes());
-
     return (
-        <div className="app">
-            <h1>Zodiac</h1>
-            {/* <Canvas /> */}
-
-            <div className="app__board">
-                <Board />
+        <GameStoreProvider>
+            <div className="app">
+                <h1>Zodiac</h1>
+                <div className="app__board">
+                    <Board />
+                </div>
+                <div className="app__details">
+                    <Details archetypes={archetypes} />
+                </div>
             </div>
-            <div className="app__details">
-                <Details archetypes={archetypes} />
-            </div>
-        </div>
+        </GameStoreProvider>
     );
 }
 
