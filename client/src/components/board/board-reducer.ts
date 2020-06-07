@@ -78,7 +78,7 @@ function boardReducer(state: State, action: Action) {
                 hexesWithMemories: [...state.hexesWithMemories, hexWithMemory],
             };
         case 'remove-hex-with-memory':
-            const filteredHexes = filter(state.hexesWithMemories, (hex) => {
+            const filteredHexes = filter(state.hexesWithMemories, (hex: IMemoryHex) => {
                 if (hex.q === action.payload?.hex?.q && hex.r === action.payload?.hex?.r) {
                     return false;
                 }

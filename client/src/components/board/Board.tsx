@@ -41,7 +41,10 @@ function Board() {
                 <HexGrid width={'100%'} height={'100%'} viewBox={'-50 -40 90 80'}>
                     <Layout size={{ x: 7, y: 7 }} flat={false} spacing={1.02} origin={{ x: 0, y: 0 }}>
                         {state.hexes.map((hex: IHex, i: number) => {
-                            const memoryHex = find(state.hexesWithMemories, (memoryHex) => memoryHex.q === hex.q && memoryHex.r === hex.r);
+                            const memoryHex = find(
+                                state.hexesWithMemories,
+                                (memoryHex: IMemoryHex) => memoryHex.q === hex.q && memoryHex.r === hex.r
+                            );
                             return (
                                 <Hexagon
                                     key={i}
