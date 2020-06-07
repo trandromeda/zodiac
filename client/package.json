@@ -6,11 +6,6 @@
         "@testing-library/jest-dom": "^4.2.4",
         "@testing-library/react": "^9.5.0",
         "@testing-library/user-event": "^7.2.1",
-        "@types/jest": "^24.9.1",
-        "@types/lodash": "^4.14.155",
-        "@types/node": "^12.12.38",
-        "@types/react": "^16.9.35",
-        "@types/react-dom": "^16.9.8",
         "lodash": "^4.17.15",
         "node-sass": "^4.14.1",
         "phaser": "^3.23.0",
@@ -42,6 +37,11 @@
         ]
     },
     "devDependencies": {
-        "@types/socket.io-client": "^1.4.33"
+        "@types/socket.io-client": "^1.4.33",
+        "@types/jest": "^24.9.1",
+        "@types/lodash": "^4.14.155",
+        "@types/node": "^12.12.38",
+        "@types/react": "^16.9.35",
+        "@types/react-dom": "^16.9.8"
     }
 }
