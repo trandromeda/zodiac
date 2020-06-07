@@ -9,14 +9,16 @@ interface Props {
 
 const Archetype = ({ archetype }: Props) => {
     useEffect(() => console.log(archetype));
-    const { name, description, flavour, imageUrl, charges, turnType } = archetype;
+    const { id, name, description, flavour, charges, turnType } = archetype;
 
     return (
         <div className="archetype">
             <p>{name}</p>
+            <img src={require(`../../assets/${id}.jpg`)} />
             <p>{description}</p>
             <p>{flavour}</p>
-            <img src={require(`${imageUrl}`)} />
+            <p>{charges}</p>
+            <p>{turnType}</p>
         </div>
     );
 };
