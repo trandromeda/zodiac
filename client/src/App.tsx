@@ -6,7 +6,7 @@ import Board from './components/board/Board';
 import Archetype from 'src/components/archetype/archetype.model';
 import { archetypes } from 'src/data/archetypes';
 
-import { GameStoreProvider } from 'src/store';
+import { GameStoreProvider } from 'src/game-store';
 
 import './App.scss';
 
@@ -19,7 +19,6 @@ function App() {
     return (
         <GameStoreProvider>
             <div className="app">
-                <h1>Zodiac</h1>
                 <div className="app__board">
                     <Board />
                 </div>
