@@ -12,12 +12,14 @@ const Archetype = ({ archetype }: Props) => {
 
     return (
         <div className="archetype">
-            <p>{name}</p>
+            <p className="archetype__name">{name}</p>
             <img src={require(`../../assets/${id}.jpg`)} />
-            <p>{description}</p>
-            <p>{flavour}</p>
-            <p>{charges}</p>
-            <p>{turnType}</p>
+            <p className="archetype__description">{description}</p>
+            <div className="archetype__footer">
+                <p className="footer__charges">{charges}</p>
+                <p className="footer__turn">{turnType}</p>
+                <p className="footer__flavour">{flavour}</p>
+            </div>
         </div>
     );
 };

@@ -38,7 +38,7 @@ function Board() {
     return (
         <div className="board">
             <div className="board__grid">
-                <HexGrid width={'100%'} height={'100%'} viewBox={'-47 -40 95 85'}>
+                <HexGrid width={'100%'} height={'100%'} viewBox={'-46 -40 80 80'}>
                     <Layout size={{ x: 7, y: 7 }} flat={false} spacing={1.02} origin={{ x: 0, y: 0 }}>
                         {state.hexes.map((hex: IHex, i: number) => {
                             const memoryHex = find(

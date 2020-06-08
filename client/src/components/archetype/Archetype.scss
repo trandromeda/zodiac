@@ -3,7 +3,41 @@
     height: auto;
     padding: 1em;
     margin: 1em 0;
-    border: 2px solid black;
+    background: #fff;
+    border-radius: 0.5em;
+    box-shadow: 0px 1px 5px 2px rgba(0, 0, 0, 0.2);
+}
+
+.archetype__name {
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.2em;
+    margin: 0 0 1em 0;
+}
+
+.archetype__footer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    font-size: 0.9em;
+    justify-content: space-between;
+
+    p {
+        margin-top: 0;
+    }
+
+    .footer__charges,
+    .footer__turn {
+        text-align: center;
+    }
+
+    .footer__flavour {
+        width: 100%;
+        margin: 0;
+        font-size: 0.8em;
+        font-style: italic;
+        text-align: center;
+    }
 }
 
 img {
