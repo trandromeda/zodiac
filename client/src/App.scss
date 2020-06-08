@@ -1,17 +1,31 @@
 .app {
     display: flex;
-    flex-direction: column;
+    padding: 1em 0;
 
-    h1 {
+    h1.title {
         width: 100%;
         text-align: center;
     }
 
     .app__details {
-        flex: 1 0 15%;
+        order: 1;
+        flex: 0 1 25%;
     }
 
     .app__board {
+        order: 2;
         flex: 1 0 auto;
+    }
+
+    @media only screen and (max-width: 920px) {
+        flex-direction: column;
+
+        .app__details {
+            order: 2;
+        }
+
+        .app__board {
+            order: 1;
+        }
     }
 }
