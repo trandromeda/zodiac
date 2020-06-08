@@ -16,7 +16,7 @@ function Details(props: Props) {
     const { gameState, gameDispatch } = useContext(GameStore);
 
     const handleEnterPreparationPhase = () => {
-        gameDispatch({ type: 'next-stage', payload: 'preparation' });
+        gameDispatch({ type: 'next-stage', payload: { stage: 'labyrinth-creation' } });
     };
 
     useEffect(() => {
