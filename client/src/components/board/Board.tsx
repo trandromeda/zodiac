@@ -11,7 +11,7 @@ function Board() {
     const [state, dispatch] = useBoardReducer();
 
     // for debugging
-    useEffect(() => console.log(state));
+    // useEffect(() => console.log(state));
 
     /** The outcome of handleClick will depend on game state */
     const handleClick = (event: MouseEvent, hexagon: any) => {
@@ -38,7 +38,7 @@ function Board() {
     return (
         <div className="board">
             <div className="board__grid">
-                <HexGrid width={'100%'} height={'100%'} viewBox={'-50 -40 90 80'}>
+                <HexGrid width={'100%'} height={'100%'} viewBox={'-47 -40 95 85'}>
                     <Layout size={{ x: 7, y: 7 }} flat={false} spacing={1.02} origin={{ x: 0, y: 0 }}>
                         {state.hexes.map((hex: IHex, i: number) => {
                             const memoryHex = find(

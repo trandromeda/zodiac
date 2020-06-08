@@ -8,7 +8,6 @@ interface Props {
 }
 
 const Archetype = ({ archetype }: Props) => {
-    useEffect(() => console.log(archetype));
     const { id, name, description, flavour, charges, turnType } = archetype;
 
     return (
