@@ -4,9 +4,33 @@ const io = require('socket.io')(http);
 const _ = require('lodash');
 
 const players = [];
+let archetypes = [
+    'innocent',
+    'sage',
+    'explorer',
+    'fool',
+    'lover',
+    'orphan',
+    'hero',
+    'rebel',
+    'magician',
+    'ruler',
+    'creator',
+    'guardian',
+];
+
+const shuffle = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+
+    return array;
+};
 
 io.on('connection', (socket) => {
     console.log(`A user connected: ${socket.id}`);
+    archetypes = shuffle(archetypes);
 
     io.emit('currentPlayers', players);
 
@@ -20,8 +44,12 @@ io.on('connection', (socket) => {
         io.emit('currentPlayers', players);
     });
 
-    socket.on('random', function () {
-        console.log('random');
+    socket.on('dealArchetypes', () => {
+        const shuffledArchetypes = shuffle(archetypes);
+        console.log(shuffledArchetypes);
+        players.forEach((player, i) => {
+            io.to(player.id).emit('dealtArchetype', shuffledArchetypes[i]);
+        });
     });
 
     socket.on('disconnect', () => {
