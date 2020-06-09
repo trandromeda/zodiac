@@ -1,16 +1,24 @@
 .board {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: center;
 }
 
 .board__grid {
-    flex: 1 0 auto;
-    width: 100%;
+    // flex: 1 0 90vh;
+    // width: 100%;
+    // max-width: 650px;
+    height: 90vh;
+    max-height: 1200px;
 
     @media only screen and (max-width: 920px) {
         max-width: 650px;
     }
+}
+
+.board__details {
+    display: flex;
+    margin: auto;
 }
 
 g.hexagon {
