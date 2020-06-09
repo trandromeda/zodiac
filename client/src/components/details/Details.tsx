@@ -13,19 +13,29 @@ type Props = {
 
 function Details(props: Props) {
     const [players, setPlayers] = useState([{ playerName: '', id: '' }]);
+    const [archetype, setArchetype] = useState('');
     const { gameState, gameDispatch } = useContext(GameStore);
 
     const handleEnterPreparationPhase = () => {
         gameDispatch({ type: 'next-stage', payload: { stage: 'labyrinth-creation' } });
     };
 
+    const dealArchetypes = () => {
+        socket.emit('dealArchetypes');
+    };
+
     useEffect(() => {
         socket.on('currentPlayers', (playerNames: { playerName: string; id: string }[]) => {
             if (playerNames.length) setPlayers(playerNames);
         });
+
+        socket.on('dealtArchetype', (archetype: string) => {
+            console.log(archetype);
+            setArchetype(archetype);
+        });
     }, []);
 
-    useEffect(() => console.log(gameState));
+    // useEffect(() => console.log(gameState));
 
     return (
         <div className="details">
@@ -49,10 +59,18 @@ function Details(props: Props) {
                 <button onClick={handleEnterPreparationPhase}>All players ready</button>
             </div>
             <div>
+                <button onClick={dealArchetypes}>Deal Archetypes</button>
+            </div>
+            {archetype && (
+                <div>
+                    <p> You are {archetype}</p>
+                </div>
+            )}
+            {/* <div>
                 {props.archetypes.map((archetype: IArchetype) => {
                     return <Archetype key={archetype.id} archetype={archetype} />;
                 })}
-            </div>
+            </div> */}
         </div>
     );
 }
