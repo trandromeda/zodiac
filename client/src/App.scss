@@ -1,7 +1,9 @@
 .app {
     display: flex;
     max-width: 1400px;
-    padding: 2.5em;
+    padding: 2em;
+    justify-content: space-between;
+    margin: auto;
 
     h1.title {
         width: 100%;
