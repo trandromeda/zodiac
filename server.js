@@ -32,23 +32,41 @@ io.on('connection', (socket) => {
     console.log(`A user connected: ${socket.id}`);
     archetypes = shuffle(archetypes);
 
-    io.emit('currentPlayers', players);
+    // This is better to do with a db call
+    // socket.on('getPlayers', (uuid) => {
+    //     const existingPlayer = _.find(players, {
+    //         playerUUID: uuid,
+    //     });
+    //     console.log(players);
+    //     if (existingPlayer) socket.emit('currentPlayers', players);
+    // });
 
-    socket.on('newPlayer', (playerName, callback) => {
-        if (_.find(players, { id: socket.id })) return;
-        players.push({
-            playerName,
-            id: socket.id,
+    socket.on('joinGame', (playerData) => {
+        // TEMP: Use name instead of UUID so multiple tabs can be opened
+        const existingPlayer = _.find(players, {
+            name: playerData.name,
         });
-        callback(playerName);
+
+        if (existingPlayer) {
+            existingPlayer.socketId = socket.id;
+        } else {
+            players.push({
+                name: playerData.name,
+                socketId: socket.id,
+                playerUUID: playerData.playerUUID,
+            });
+        }
+
         io.emit('currentPlayers', players);
     });
 
     socket.on('dealArchetypes', () => {
         const shuffledArchetypes = shuffle(archetypes);
-        console.log(shuffledArchetypes);
         players.forEach((player, i) => {
-            io.to(player.id).emit('dealtArchetype', shuffledArchetypes[i]);
+            io.to(player.socketId).emit(
+                'dealtArchetype',
+                shuffledArchetypes[i]
+            );
         });
     });
 
