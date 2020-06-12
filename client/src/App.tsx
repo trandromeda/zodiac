@@ -1,21 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import localUUID from 'react-uuid';
+import socket from 'src/utils/socket';
 
 import Details from './components/details/Details';
 import Board from './components/board/Board';
-
-import Archetype from 'src/components/archetype/archetype.model';
-import { archetypes } from 'src/data/archetypes';
 
 import { GameStoreProvider } from 'src/game-store';
 
 import './App.scss';
 
-function generateArchetypes() {
-    return archetypes.map((archetype) => new Archetype(archetype));
-}
-
 function App() {
-    const [archetypes] = useState(generateArchetypes());
+    const [playerUUID, setPlayerUUID] = useState('');
+
+    useEffect(() => {
+        const uuid = localStorage.getItem('uuid') || localUUID();
+
+        setPlayerUUID(uuid);
+
+        // socket.emit('getPlayers', uuid);
+    }, []);
+
     return (
         <GameStoreProvider>
             <div className="app">
@@ -23,7 +27,7 @@ function App() {
                     <Board />
                 </div>
                 <div className="app__details">
-                    <Details archetypes={archetypes} />
+                    <Details playerUUID={playerUUID} />
                 </div>
             </div>
         </GameStoreProvider>
