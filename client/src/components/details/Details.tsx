@@ -24,7 +24,7 @@ function Details(props: Props) {
     };
 
     useEffect(() => {
-        socket.on('currentPlayers', (currentPlayers: { name: string; playerUUID: string }[]) => {
+        const updatePlayersList = (currentPlayers: { name: string; playerUUID: string }[]) => {
             if (currentPlayers.length) {
                 const playersWithIds = currentPlayers.map((player) => {
                     return {
@@ -33,14 +33,21 @@ function Details(props: Props) {
                     };
                 });
                 setPlayers(playersWithIds);
-
-                // TEMP: Use name instead of UUID so we can have multiple browser tabs open
-                // const currentPlayer = currentPlayers.filter((player) => player.playerUUID === props.playerUUID)[0];
-                const currentPlayer = currentPlayers.filter((player) => player.name === gameState.playerName)[0];
-                if (currentPlayer) setCurrentPlayer(currentPlayer);
             }
-        });
-    }, [props.playerUUID, gameState]);
+        };
+        socket.on('currentPlayers', updatePlayersList);
+
+        return () => {
+            socket.off('currentPlayers', updatePlayersList);
+        };
+    }, []);
+
+    useEffect(() => {
+        // TEMP: Use name instead of UUID so we can have multiple browser tabs open
+        // const currentPlayer = currentPlayers.filter((player) => player.playerUUID === props.playerUUID)[0];
+        const currentPlayer = players.filter((player) => player.name === gameState.playerName)[0];
+        if (currentPlayer) setCurrentPlayer(currentPlayer);
+    }, [gameState.playerName, players]);
 
     return (
         <div className="details">
