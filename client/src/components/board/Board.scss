@@ -3,6 +3,7 @@
     max-height: 925px;
 
     @media only screen and (max-width: 920px) {
+        height: 60vh;
         max-width: 650px;
         margin: auto;
     }
