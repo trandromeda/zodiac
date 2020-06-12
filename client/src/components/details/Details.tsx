@@ -5,15 +5,14 @@ import './Details.scss';
 import PlayerName from './PlayerName';
 import Archetype from 'src/components/archetype/Archetype';
 import { GameStore } from 'src/game-store';
-import { IArchetype } from '../archetype/archetype.model';
 
 type Props = {
-    archetypes: any;
+    playerUUID: string;
 };
 
 function Details(props: Props) {
-    const [players, setPlayers] = useState([{ playerName: '', id: '' }]);
-    const [archetype, setArchetype] = useState('');
+    const [players, setPlayers] = useState([{ name: '', playerUUID: '' }]);
+    const [currentPlayer, setCurrentPlayer] = useState({ name: '', playerUUID: '' });
     const { gameState, gameDispatch } = useContext(GameStore);
 
     const handleEnterPreparationPhase = () => {
@@ -25,31 +24,37 @@ function Details(props: Props) {
     };
 
     useEffect(() => {
-        socket.on('currentPlayers', (playerNames: { playerName: string; id: string }[]) => {
-            if (playerNames.length) setPlayers(playerNames);
-        });
+        socket.on('currentPlayers', (currentPlayers: { name: string; playerUUID: string }[]) => {
+            if (currentPlayers.length) {
+                const playersWithIds = currentPlayers.map((player) => {
+                    return {
+                        name: player.name,
+                        playerUUID: player.playerUUID,
+                    };
+                });
+                setPlayers(playersWithIds);
 
-        socket.on('dealtArchetype', (archetype: string) => {
-            console.log(archetype);
-            setArchetype(archetype);
+                // TEMP: Use name instead of UUID so we can have multiple browser tabs open
+                // const currentPlayer = currentPlayers.filter((player) => player.playerUUID === props.playerUUID)[0];
+                const currentPlayer = currentPlayers.filter((player) => player.name === gameState.playerName)[0];
+                if (currentPlayer) setCurrentPlayer(currentPlayer);
+            }
         });
-    }, []);
-
-    // useEffect(() => console.log(gameState));
+    }, [props.playerUUID, gameState]);
 
     return (
         <div className="details">
             <h2>Phase: {gameState.stage}</h2>
             <div className="details__player-name">
-                <PlayerName />
+                <PlayerName currentPlayer={currentPlayer} playerUUID={props.playerUUID} />
             </div>
             <div className="details__players-list">
-                {players[0].playerName && (
+                {players[0].name && (
                     <div className="details">
                         <p>Players:</p>
                         <ul>
                             {players.map((player) => {
-                                return <li key={player.id}>{player.playerName}</li>;
+                                return <li key={player.name}>{player.name}</li>;
                             })}
                         </ul>
                     </div>
@@ -61,11 +66,7 @@ function Details(props: Props) {
             <div>
                 <button onClick={dealArchetypes}>Deal Archetypes</button>
             </div>
-            {archetype && (
-                <div>
-                    <p> You are {archetype}</p>
-                </div>
-            )}
+            <Archetype />
             {/* <div>
                 {props.archetypes.map((archetype: IArchetype) => {
                     return <Archetype key={archetype.id} archetype={archetype} />;
