@@ -1,19 +1,25 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useContext, useEffect } from 'react';
 import socket from 'src/utils/socket';
+import { GameStore } from 'src/game-store';
 
-function PlayerName() {
+type Props = {
+    currentPlayer: { name: string; playerUUID: string };
+    playerUUID: string;
+};
+
+function PlayerName(props: Props) {
     const [name, setName] = useState('');
-    const [showName, setShowName] = useState(false);
+    const { gameState, gameDispatch } = useContext(GameStore);
 
     const handleSubmit = (event: FormEvent) => {
         event.preventDefault();
-        socket.emit('newPlayer', name, (playerName: string) => {
-            if (playerName) setShowName(true);
-        });
+        localStorage.setItem('uuid', props.playerUUID);
+        gameDispatch({ type: 'set-player', payload: { playerName: name } });
+        socket.emit('joinGame', { name, playerUUID: props.playerUUID });
     };
 
-    if (showName) {
-        return <h2>Welcome, {name}</h2>;
+    if (gameState.playerName) {
+        return <h2>Welcome, {gameState.playerName}</h2>;
     } else {
         return (
             <div>
