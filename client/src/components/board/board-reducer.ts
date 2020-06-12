@@ -3,7 +3,7 @@ import { filter, cloneDeep, difference } from 'lodash';
 import { Hex, GridGenerator } from '@trandromeda/react-hexgrid';
 
 import { IHex, IMemoryHex, BoardUtils } from 'src/utils/BoardUtils';
-import { memories } from 'src/data/memories';
+import { memories } from 'src/data/memories.data';
 const hexagons = GridGenerator.asymHexagon(3);
 
 type State = {
