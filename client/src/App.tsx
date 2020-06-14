@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import localUUID from 'react-uuid';
-import socket from 'src/utils/socket';
 
 import Details from './components/details/Details';
 import Board from './components/board/Board';

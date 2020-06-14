@@ -37,10 +37,12 @@ function Board() {
     };
 
     useEffect(() => {
-        socket.on('newLabyrinth', (hexes: IMemoryHex[]) => {
-            dispatch({ type: 'sync-hexes-with-memories', payload: { hexes } });
-        });
-    }, []);
+        const syncHexesWithMemories = (hexes: IMemoryHex[]) => dispatch({ type: 'sync-hexes-with-memories', payload: { hexes } });
+        socket.on('newLabyrinth', syncHexesWithMemories);
+        return () => {
+            socket.off('newLabyrinth', syncHexesWithMemories);
+        };
+    }, [dispatch]);
 
     return (
         <div className="board">

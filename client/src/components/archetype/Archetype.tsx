@@ -27,7 +27,7 @@ const Archetype = () => {
         return (
             <div className="archetype">
                 <p className="archetype__name">{name}</p>
-                <img src={require(`../../assets/${id}.jpg`)} />
+                <img src={require(`../../assets/${id}.jpg`)} alt={`${name}: ${description}`} />
                 <p className="archetype__description">{description}</p>
                 <div className="archetype__footer">
                     <p className="footer__charges">{charges}</p>

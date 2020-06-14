@@ -1,4 +1,4 @@
-import React, { useState, FormEvent, useContext, useEffect } from 'react';
+import React, { useState, FormEvent, useContext } from 'react';
 import socket from 'src/utils/socket';
 import { GameStore } from 'src/game-store';
 
