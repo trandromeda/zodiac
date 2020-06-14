@@ -18,6 +18,7 @@ let archetypes = [
     'creator',
     'guardian',
 ];
+let roles = ['shadow prime', 'vessel', 'explorer', 'explorer'];
 
 const shuffle = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -62,11 +63,12 @@ io.on('connection', (socket) => {
 
     socket.on('dealArchetypes', () => {
         const shuffledArchetypes = shuffle(archetypes);
+        const shuffledRoles = shuffle(roles);
         players.forEach((player, i) => {
-            io.to(player.socketId).emit(
-                'dealtArchetype',
-                shuffledArchetypes[i]
-            );
+            io.to(player.socketId).emit('dealtArchetype', {
+                archetype: shuffledArchetypes[i],
+                role: shuffledRoles[i],
+            });
         });
     });
 

@@ -4,6 +4,8 @@ import './Details.scss';
 
 import PlayerName from './PlayerName';
 import Archetype from 'src/components/archetype/Archetype';
+import Role from 'src/components/role/Role';
+
 import { GameStore } from 'src/game-store';
 
 type Props = {
@@ -73,6 +75,7 @@ function Details(props: Props) {
             <div>
                 <button onClick={dealArchetypes}>Deal Archetypes</button>
             </div>
+            <Role />
             <Archetype />
             {/* <div>
                 {props.archetypes.map((archetype: IArchetype) => {

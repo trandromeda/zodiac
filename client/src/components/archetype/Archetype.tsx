@@ -11,8 +11,8 @@ const Archetype = () => {
     const [playerArchetype, setArchetype] = useState<ArchetypeClass | undefined>(undefined);
 
     useEffect(() => {
-        socket.on('dealtArchetype', (archetypeId: string) => {
-            const archetypeObj = find(archetypesData, (arc) => arc.id === archetypeId);
+        socket.on('dealtArchetype', (data: { archetype: string; role: string }) => {
+            const archetypeObj = find(archetypesData, (arc) => arc.id === data.archetype);
             if (archetypeObj) {
                 const archetype = new ArchetypeClass(archetypeObj);
                 setArchetype(archetype);
