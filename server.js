@@ -61,6 +61,11 @@ io.on('connection', (socket) => {
         io.emit('currentPlayers', players);
     });
 
+    /** @params hexes Array<{ q: number, r: number, s: number, memory: string }> */
+    socket.on('newLabyrinth', (hexes) => {
+        socket.broadcast.emit('newLabyrinth', hexes);
+    });
+
     socket.on('dealArchetypes', () => {
         const shuffledArchetypes = shuffle(archetypes);
         const shuffledRoles = shuffle(roles);

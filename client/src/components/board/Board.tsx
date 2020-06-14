@@ -6,6 +6,7 @@ import { useBoardReducer } from 'src/components/board/board-reducer';
 import { IHex, IMemoryHex } from 'src/utils/BoardUtils';
 
 import './Board.scss';
+import socket from 'src/utils/socket';
 
 function Board() {
     const [state, dispatch] = useBoardReducer();
@@ -34,6 +35,12 @@ function Board() {
         const numberOfMemories = 18;
         dispatch({ type: 'add-memories-to-hexes', payload: { numberOfMemories } });
     };
+
+    useEffect(() => {
+        socket.on('newLabyrinth', (hexes: IMemoryHex[]) => {
+            dispatch({ type: 'sync-hexes-with-memories', payload: { hexes } });
+        });
+    }, []);
 
     return (
         <div className="board">
