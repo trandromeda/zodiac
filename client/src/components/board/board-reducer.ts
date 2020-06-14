@@ -3,7 +3,7 @@ import { filter, cloneDeep, difference } from 'lodash';
 import { Hex, GridGenerator } from '@trandromeda/react-hexgrid';
 
 import { IHex, IMemoryHex, BoardUtils } from 'src/utils/BoardUtils';
-import { memories } from 'src/data/memories';
+import { memories } from 'src/data/memories.data';
 const hexagons = GridGenerator.asymHexagon(3);
 
 type State = {
@@ -78,7 +78,7 @@ function boardReducer(state: State, action: Action) {
                 hexesWithMemories: [...state.hexesWithMemories, hexWithMemory],
             };
         case 'remove-hex-with-memory':
-            const filteredHexes = filter(state.hexesWithMemories, (hex) => {
+            const filteredHexes = filter(state.hexesWithMemories, (hex: IMemoryHex) => {
                 if (hex.q === action.payload?.hex?.q && hex.r === action.payload?.hex?.r) {
                     return false;
                 }

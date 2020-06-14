@@ -4,24 +4,72 @@ const io = require('socket.io')(http);
 const _ = require('lodash');
 
 const players = [];
+let archetypes = [
+    'innocent',
+    'sage',
+    'explorer',
+    'fool',
+    'lover',
+    'orphan',
+    'hero',
+    'rebel',
+    'magician',
+    'ruler',
+    'creator',
+    'guardian',
+];
+let roles = ['shadow prime', 'vessel', 'explorer', 'explorer'];
+
+const shuffle = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+
+    return array;
+};
 
 io.on('connection', (socket) => {
     console.log(`A user connected: ${socket.id}`);
+    archetypes = shuffle(archetypes);
 
-    io.emit('currentPlayers', players);
+    // This is better to do with a db call
+    // socket.on('getPlayers', (uuid) => {
+    //     const existingPlayer = _.find(players, {
+    //         playerUUID: uuid,
+    //     });
+    //     console.log(players);
+    //     if (existingPlayer) socket.emit('currentPlayers', players);
+    // });
 
-    socket.on('newPlayer', (playerName, callback) => {
-        if (_.find(players, { id: socket.id })) return;
-        players.push({
-            playerName,
-            id: socket.id,
+    socket.on('joinGame', (playerData) => {
+        // TEMP: Use name instead of UUID so multiple tabs can be opened
+        const existingPlayer = _.find(players, {
+            name: playerData.name,
         });
-        callback(playerName);
+
+        if (existingPlayer) {
+            existingPlayer.socketId = socket.id;
+        } else {
+            players.push({
+                name: playerData.name,
+                socketId: socket.id,
+                playerUUID: playerData.playerUUID,
+            });
+        }
+
         io.emit('currentPlayers', players);
     });
 
-    socket.on('random', function () {
-        console.log('random');
+    socket.on('dealArchetypes', () => {
+        const shuffledArchetypes = shuffle(archetypes);
+        const shuffledRoles = shuffle(roles);
+        players.forEach((player, i) => {
+            io.to(player.socketId).emit('dealtArchetype', {
+                archetype: shuffledArchetypes[i],
+                role: shuffledRoles[i],
+            });
+        });
     });
 
     socket.on('disconnect', () => {

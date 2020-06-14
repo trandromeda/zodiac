@@ -1,23 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import localUUID from 'react-uuid';
+import socket from 'src/utils/socket';
 
-import Details from './components/Details';
+import Details from './components/details/Details';
 import Board from './components/board/Board';
+
+import { GameStoreProvider } from 'src/game-store';
 
 import './App.scss';
 
 function App() {
-    return (
-        <div className="app">
-            <h1>Zodiac</h1>
-            {/* <Canvas /> */}
+    const [playerUUID, setPlayerUUID] = useState('');
 
-            <div className="app__board">
-                <Board />
+    useEffect(() => {
+        const uuid = localStorage.getItem('uuid') || localUUID();
+
+        setPlayerUUID(uuid);
+
+        // socket.emit('getPlayers', uuid);
+    }, []);
+
+    return (
+        <GameStoreProvider>
+            <div className="app">
+                <div className="app__board">
+                    <Board />
+                </div>
+                <div className="app__details">
+                    <Details playerUUID={playerUUID} />
+                </div>
             </div>
-            <div className="app__details">
-                <Details />
-            </div>
-        </div>
+        </GameStoreProvider>
     );
 }
 
