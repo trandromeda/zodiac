@@ -20,6 +20,8 @@ let archetypes = [
 ];
 let roles = ['shadow prime', 'vessel', 'explorer', 'explorer'];
 
+let hexesWithMemories = [];
+
 const shuffle = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -63,18 +65,24 @@ io.on('connection', (socket) => {
 
     /** @params hexes Array<{ q: number, r: number, s: number, memory: string }> */
     socket.on('newLabyrinth', (hexes) => {
+        hexesWithMemories = hexes;
         socket.broadcast.emit('newLabyrinth', hexes);
     });
 
     socket.on('dealArchetypes', () => {
         const shuffledArchetypes = shuffle(archetypes);
         const shuffledRoles = shuffle(roles);
+        const shuffledHexes = shuffle(hexesWithMemories);
+
         players.forEach((player, i) => {
             io.to(player.socketId).emit('dealtArchetype', {
                 archetype: shuffledArchetypes[i],
                 role: shuffledRoles[i],
+                coordinates: [shuffledHexes.pop(), shuffledHexes.pop()],
             });
         });
+
+        console.log(shuffledHexes);
     });
 
     socket.on('disconnect', () => {

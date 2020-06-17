@@ -5,6 +5,7 @@ import './Details.scss';
 import PlayerName from './PlayerName';
 import Archetype from 'src/components/archetype/Archetype';
 import Role from 'src/components/role/Role';
+import Coordinates from 'src/components/coordinates/Coordinates';
 
 import { GameStore } from 'src/game-store';
 
@@ -76,6 +77,7 @@ function Details(props: Props) {
                 <button onClick={dealArchetypes}>Deal Archetypes</button>
             </div>
             <Role />
+            <Coordinates />
             <Archetype />
             {/* <div>
                 {props.archetypes.map((archetype: IArchetype) => {
