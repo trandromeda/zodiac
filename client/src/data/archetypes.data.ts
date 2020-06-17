@@ -1,4 +1,4 @@
-import { IArchetype } from 'src/components/archetype/archetype.model';
+import { IArchetype } from 'src/components/details/archetype/archetype.model';
 
 export const archetypesData: IArchetype[] = [
     {

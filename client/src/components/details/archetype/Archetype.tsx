@@ -3,7 +3,7 @@ import socket from 'src/utils/socket';
 import { find } from 'lodash';
 
 import { archetypesData } from 'src/data/archetypes.data';
-import ArchetypeClass from 'src/components/archetype/archetype.model';
+import ArchetypeClass from 'src/components/details/archetype/archetype.model';
 
 import './Archetype.scss';
 
@@ -27,7 +27,7 @@ const Archetype = () => {
         return (
             <div className="archetype">
                 <p className="archetype__name">{name}</p>
-                <img src={require(`../../assets/${id}.jpg`)} alt={`${name}: ${description}`} />
+                <img src={require(`../../../assets/${id}.jpg`)} alt={`${name}: ${description}`} />
                 <p className="archetype__description">{description}</p>
                 <div className="archetype__footer">
                     <p className="footer__charges">{charges}</p>

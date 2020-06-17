@@ -3,9 +3,9 @@ import socket from 'src/utils/socket';
 import './Details.scss';
 
 import PlayerName from './PlayerName';
-import Archetype from 'src/components/archetype/Archetype';
-import Role from 'src/components/role/Role';
-import Coordinates from 'src/components/coordinates/Coordinates';
+import Archetype from 'src/components/details/archetype/Archetype';
+import Role from 'src/components/details/role/Role';
+import Coordinates from 'src/components/details/coordinates/Coordinates';
 
 import { GameStore } from 'src/game-store';
 
