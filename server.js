@@ -75,6 +75,8 @@ io.on('connection', (socket) => {
         const shuffledHexes = shuffle(hexesWithMemories);
 
         players.forEach((player, i) => {
+            player['archetype'] = shuffledArchetypes[i];
+
             io.to(player.socketId).emit('dealtArchetype', {
                 archetype: shuffledArchetypes[i],
                 role: shuffledRoles[i],
@@ -82,7 +84,7 @@ io.on('connection', (socket) => {
             });
         });
 
-        console.log(shuffledHexes);
+        io.emit('currentPlayers', players);
     });
 
     socket.on('disconnect', () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 
 type Props = {
-    players: { name: string; playerUUID: string }[];
+    players: { name: string; playerUUID: string; archetype?: string }[];
 };
 
 function PlayerList(props: Props) {
@@ -12,7 +12,14 @@ function PlayerList(props: Props) {
                     <p>Players:</p>
                     <ul>
                         {props.players.map((player) => {
-                            return <li key={player.name}>{player.name}</li>;
+                            return (
+                                <li key={player.name}>
+                                    {player.name}{' '}
+                                    {player.archetype
+                                        ? `(The ${player.archetype.charAt(0).toUpperCase() + player.archetype.slice(1)})`
+                                        : ''}
+                                </li>
+                            );
                         })}
                     </ul>
                 </div>

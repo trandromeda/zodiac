@@ -37,13 +37,13 @@ function Details(props: Props) {
 
     /** Listen for new players */
     useEffect(() => {
-        const updatePlayersList = (currentPlayers: { name: string; playerUUID: string }[]) => {
+        const updatePlayersList = (currentPlayers: { name: string; playerUUID: string; archetype?: string }[]) => {
             if (currentPlayers.length) {
                 const playersWithIds = currentPlayers.map((player) => {
                     return {
                         name: player.name,
                         playerUUID: player.playerUUID,
-                        archetype: '',
+                        archetype: player.archetype || '',
                     };
                 });
                 setPlayers(playersWithIds);
