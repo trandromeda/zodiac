@@ -16,10 +16,17 @@
 
 g.hexagon {
     fill: rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
 }
 
 g.highlight g.hexagon {
     fill: rgba(0, 0, 0, 0.8);
+    transition: all 0.2s;
+}
+
+g.hover-highlight g.hexagon {
+    fill: rgba(0, 0, 0, 0.6);
+    transition: all 0.3s;
 }
 
 g text {
