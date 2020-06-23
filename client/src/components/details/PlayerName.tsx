@@ -3,7 +3,6 @@ import socket from 'src/utils/socket';
 import { GameStore } from 'src/game-store';
 
 type Props = {
-    currentPlayer: { name: string; playerUUID: string };
     playerUUID: string;
 };
 
@@ -14,12 +13,12 @@ function PlayerName(props: Props) {
     const handleSubmit = (event: FormEvent) => {
         event.preventDefault();
         localStorage.setItem('uuid', props.playerUUID);
-        gameDispatch({ type: 'set-player', payload: { playerName: name } });
+        gameDispatch({ type: 'set-player', payload: { player: { name, playerUUID: props.playerUUID } } });
         socket.emit('joinGame', { name, playerUUID: props.playerUUID });
     };
 
-    if (gameState.playerName) {
-        return <h2>Welcome, {gameState.playerName}</h2>;
+    if (gameState.player?.name) {
+        return <h2>Welcome, {gameState.player?.name}</h2>;
     } else {
         return (
             <div>

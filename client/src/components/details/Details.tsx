@@ -9,14 +9,22 @@ import Role from 'src/components/details/role/Role';
 import Coordinates from 'src/components/details/coordinates/Coordinates';
 
 import { GameStore } from 'src/game-store';
+import { IMemoryHex } from 'src/utils/BoardUtils';
 
 type Props = {
     playerUUID: string;
 };
 
+interface Player {
+    name: string;
+    playerUUID: string;
+    archetype?: string;
+    role?: string;
+    coordinates?: IMemoryHex[];
+}
+
 function Details(props: Props) {
-    const [players, setPlayers] = useState([{ name: '', playerUUID: '' }]);
-    const [currentPlayer, setCurrentPlayer] = useState({ name: '', playerUUID: '' });
+    const [players, setPlayers] = useState([{ name: '', playerUUID: '', archetype: '' }]);
     const { gameState, gameDispatch } = useContext(GameStore);
 
     const handleEnterPreparationPhase = () => {
@@ -27,6 +35,7 @@ function Details(props: Props) {
         socket.emit('dealArchetypes');
     };
 
+    /** Listen for new players */
     useEffect(() => {
         const updatePlayersList = (currentPlayers: { name: string; playerUUID: string }[]) => {
             if (currentPlayers.length) {
@@ -34,6 +43,7 @@ function Details(props: Props) {
                     return {
                         name: player.name,
                         playerUUID: player.playerUUID,
+                        archetype: '',
                     };
                 });
                 setPlayers(playersWithIds);
@@ -46,18 +56,24 @@ function Details(props: Props) {
         };
     }, []);
 
+    /** Listen for card deal */
     useEffect(() => {
-        // TEMP: Use name instead of UUID so we can have multiple browser tabs open
-        // const currentPlayer = currentPlayers.filter((player) => player.playerUUID === props.playerUUID)[0];
-        const currentPlayer = players.filter((player) => player.name === gameState.playerName)[0];
-        if (currentPlayer) setCurrentPlayer(currentPlayer);
-    }, [gameState.playerName, players]);
+        socket.on('dealtArchetype', (data: { archetype: string; role: string; coordinates: IMemoryHex[] }) => {
+            // const archetypeObj = find(archetypesData, (arc) => arc.id === data.archetype);
+            // if (archetypeObj) {
+            //     const archetype = new ArchetypeClass(archetypeObj);
+            //     setArchetype(archetype);
+            // } else {
+            //     setArchetype(undefined);
+            // }
+        });
+    }, []);
 
     return (
         <div className="details">
             <h2>Phase: {gameState.stage}</h2>
             <div className="details__player-name">
-                <PlayerName currentPlayer={currentPlayer} playerUUID={props.playerUUID} />
+                <PlayerName playerUUID={props.playerUUID} />
             </div>
             <PlayerList players={players} />
             <div className="details__prepare">

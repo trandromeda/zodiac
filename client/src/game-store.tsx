@@ -1,18 +1,20 @@
 import React, { createContext, useReducer } from 'react';
 
 type Stage = 'lobby' | 'labyrinth-creation' | 'assignments' | undefined;
+type Player = { name: string; playerUUID: string };
+
 type InitialState = {
     stage: Stage;
-    playerName?: string;
+    player?: Player;
 };
 type Payload = {
     stage?: Stage;
-    playerName?: string;
+    player?: Player;
 };
 
 const initialState: InitialState = {
     stage: 'lobby',
-    playerName: '',
+    player: { name: '', playerUUID: '' },
 };
 
 interface IGameContext {
@@ -29,8 +31,8 @@ const GameStoreProvider = ({ children }: any) => {
                 const stage = action.payload.stage;
                 return { ...state, stage };
             case 'set-player':
-                const playerName = action.payload.playerName;
-                return { ...state, playerName };
+                const player = action.payload.player;
+                return { ...state, player };
             default:
                 throw new Error();
         }

@@ -1,6 +1,4 @@
-import React, { useState, FormEvent, useContext } from 'react';
-import socket from 'src/utils/socket';
-import { GameStore } from 'src/game-store';
+import React from 'react';
 
 type Props = {
     players: { name: string; playerUUID: string }[];

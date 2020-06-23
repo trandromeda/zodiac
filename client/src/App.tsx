@@ -16,7 +16,12 @@ function App() {
 
         setPlayerUUID(uuid);
 
+        // TODO: Find and repopulate player data upon disconnect or refresh
         // socket.emit('getPlayers', uuid);
+        // TEMP: Use name instead of UUID so we can have multiple browser tabs open
+        // const currentPlayer = currentPlayers.filter((player) => player.playerUUID === props.playerUUID)[0];
+        // const currentPlayer = players.filter((player) => player.name === gameState.playerName)[0];
+        // if (currentPlayer) setCurrentPlayer(currentPlayer);
     }, []);
 
     return (
