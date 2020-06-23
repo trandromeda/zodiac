@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import socket from 'src/utils/socket';
 import './Details.scss';
 
+import PlayerList from './player-list/PlayerList';
 import PlayerName from './PlayerName';
 import Archetype from 'src/components/details/archetype/Archetype';
 import Role from 'src/components/details/role/Role';
@@ -58,18 +59,7 @@ function Details(props: Props) {
             <div className="details__player-name">
                 <PlayerName currentPlayer={currentPlayer} playerUUID={props.playerUUID} />
             </div>
-            <div className="details__players-list">
-                {players[0].name && (
-                    <div className="details">
-                        <p>Players:</p>
-                        <ul>
-                            {players.map((player) => {
-                                return <li key={player.name}>{player.name}</li>;
-                            })}
-                        </ul>
-                    </div>
-                )}
-            </div>
+            <PlayerList players={players} />
             <div className="details__prepare">
                 <button onClick={handleEnterPreparationPhase}>All players ready</button>
             </div>
