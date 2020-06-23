@@ -52,6 +52,8 @@ io.on('connection', (socket) => {
 
         if (existingPlayer) {
             existingPlayer.socketId = socket.id;
+
+            socket.emit('restoreData', existingPlayer);
         } else {
             players.push({
                 name: playerData.name,
