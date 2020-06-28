@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import socket from 'src/utils/socket';
+import React, { useState, useEffect, useContext } from 'react';
+import { GameStore } from 'src/game-store';
 
 const Role = () => {
-    const [role, setRole] = useState('');
+    const [role, setRole] = useState<string | undefined>('');
+    const { gameState } = useContext(GameStore);
+
     useEffect(() => {
-        socket.on('dealtArchetype', (data: { archetype: string; role: string }) => {
-            setRole(data.role);
-        });
-    }, []);
+        setRole(gameState.player?.role);
+    }, [gameState.player?.role]);
 
     return <div className="role">Role: {role}</div>;
 };

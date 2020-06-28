@@ -1,38 +1,47 @@
 import React, { createContext, useReducer } from 'react';
+import { Player } from './models/player.model';
 
 type Stage = 'lobby' | 'labyrinth-creation' | 'assignments' | undefined;
-type Player = { name: string; playerUUID: string };
-
 type InitialState = {
     stage: Stage;
-    player?: Player;
+    player: Player | undefined;
 };
+
+const initialState: InitialState = {
+    stage: 'lobby',
+    player: { name: '', playerUUID: '', role: '', archetype: '', coordinates: [] },
+};
+
+type Actions = 'next-stage' | 'restore-player' | 'update-player';
 type Payload = {
     stage?: Stage;
     player?: Player;
 };
 
-const initialState: InitialState = {
-    stage: 'lobby',
-    player: { name: '', playerUUID: '' },
-};
-
 interface IGameContext {
     gameState: InitialState;
-    gameDispatch: React.Dispatch<{ type: string; payload: Payload }>;
+    gameDispatch: React.Dispatch<{ type: Actions; payload: Payload }>;
 }
 
 const GameStore = createContext({} as IGameContext);
 
+// TODO: Split this into different child reducers if state grows too large
 const GameStoreProvider = ({ children }: any) => {
-    const [gameState, gameDispatch] = useReducer((state: InitialState, action: { type: string; payload: Payload }) => {
+    const [gameState, gameDispatch] = useReducer((state: InitialState, action: { type: Actions; payload: Payload }) => {
         switch (action.type) {
             case 'next-stage':
                 const stage = action.payload.stage;
                 return { ...state, stage };
-            case 'set-player':
-                const player = action.payload.player;
-                return { ...state, player };
+            case 'restore-player':
+                return { ...state, player: action.payload.player };
+            case 'update-player':
+                const updatedPlayer: Player = {
+                    name: '',
+                    playerUUID: '',
+                    ...state.player,
+                    ...action.payload.player,
+                };
+                return { ...state, player: updatedPlayer };
             default:
                 throw new Error();
         }

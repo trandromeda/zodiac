@@ -3,28 +3,11 @@ import socketio from 'socket.io';
 import http from 'http';
 import _ from 'lodash';
 
+import { Player, IMemoryHex } from './interfaces';
+
 const server = express();
 const httpclient = http.createServer(server);
 const io = socketio(httpclient);
-
-interface Player {
-    name: string;
-    socketId: string;
-    playerUUID: string;
-    archetype?: string;
-    role?: string;
-    coordinates?: string;
-}
-
-export interface IHex {
-    q: number;
-    r: number;
-    s: number;
-}
-
-export interface IMemoryHex extends IHex {
-    memory?: string;
-}
 
 const players: Player[] = [];
 let archetypes = [
@@ -45,13 +28,23 @@ const roles = ['shadow prime', 'vessel', 'explorer', 'explorer'];
 
 let hexesWithMemories: IMemoryHex[] = [];
 
-const shuffle = (array: any[]) => {
+const shuffle = <T>(array: T[]) => {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
 
     return array;
+};
+
+const getPublicPlayers = (publicPlayers: Player[]) => {
+    return publicPlayers.map((player) => {
+        return {
+            name: player.name,
+            playerUUID: player.playerUUID,
+            archetype: player.archetype,
+        };
+    });
 };
 
 io.on('connection', (socket: any) => {
@@ -77,17 +70,17 @@ io.on('connection', (socket: any) => {
 
             if (existingPlayer) {
                 existingPlayer.socketId = socket.id;
-
                 socket.emit('restoreData', existingPlayer);
+                socket.emit('newLabyrinth', hexesWithMemories);
             } else {
                 players.push({
                     name: playerData.name,
-                    socketId: socket.id,
                     playerUUID: playerData.playerUUID,
+                    socketId: socket.id,
                 });
             }
 
-            io.emit('currentPlayers', players);
+            io.emit('currentPlayers', getPublicPlayers(players));
         }
     );
 
@@ -97,22 +90,26 @@ io.on('connection', (socket: any) => {
         socket.broadcast.emit('newLabyrinth', hexes);
     });
 
-    socket.on('dealArchetypes', () => {
+    socket.on('requestCards', () => {
         const shuffledArchetypes = shuffle(archetypes);
         const shuffledRoles = shuffle(roles);
-        const shuffledHexes = shuffle(hexesWithMemories);
+        const shuffledHexes = shuffle(_.cloneDeep(hexesWithMemories));
 
         players.forEach((player, i) => {
             player.archetype = shuffledArchetypes[i];
+            player.role = shuffledRoles[i];
+            player.coordinates = [shuffledHexes.pop(), shuffledHexes.pop()];
 
-            io.to(player.socketId).emit('dealtArchetype', {
-                archetype: shuffledArchetypes[i],
-                role: shuffledRoles[i],
-                coordinates: [shuffledHexes.pop(), shuffledHexes.pop()],
+            io.to(player.socketId).emit('dealCards', {
+                name: player.name,
+                playerUUID: player.playerUUID,
+                archetype: player.archetype,
+                role: player.role,
+                coordinates: player.coordinates,
             });
         });
 
-        io.emit('currentPlayers', players);
+        io.emit('currentPlayers', getPublicPlayers(players));
     });
 
     socket.on('disconnect', () => {

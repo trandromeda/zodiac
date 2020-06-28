@@ -31,8 +31,8 @@ function Details(props: Props) {
         gameDispatch({ type: 'next-stage', payload: { stage: 'labyrinth-creation' } });
     };
 
-    const dealArchetypes = () => {
-        socket.emit('dealArchetypes');
+    const requestCards = () => {
+        socket.emit('requestCards');
     };
 
     /** Listen for new players */
@@ -58,7 +58,19 @@ function Details(props: Props) {
 
     /** Listen for card deal */
     useEffect(() => {
-        socket.on('dealtArchetype', (data: { archetype: string; role: string; coordinates: IMemoryHex[] }) => {
+        socket.on('dealCards', (data: Player) => {
+            gameDispatch({
+                type: 'update-player',
+                payload: {
+                    player: {
+                        name: data.name,
+                        playerUUID: data.playerUUID,
+                        archetype: data.archetype,
+                        role: data.role,
+                        coordinates: data.coordinates,
+                    },
+                },
+            });
             // const archetypeObj = find(archetypesData, (arc) => arc.id === data.archetype);
             // if (archetypeObj) {
             //     const archetype = new ArchetypeClass(archetypeObj);
@@ -67,6 +79,16 @@ function Details(props: Props) {
             //     setArchetype(undefined);
             // }
         });
+    }, []);
+
+    /** only called if the player disconnects and then re-joins the game */
+    useEffect(() => {
+        const restorePlayer = (player: Player) => gameDispatch({ type: 'restore-player', payload: { player } });
+        socket.on('restoreData', restorePlayer);
+
+        return () => {
+            socket.off('restoreData', restorePlayer);
+        };
     }, []);
 
     return (
@@ -80,7 +102,7 @@ function Details(props: Props) {
                 <button onClick={handleEnterPreparationPhase}>All players ready</button>
             </div>
             <div>
-                <button onClick={dealArchetypes}>Deal Archetypes</button>
+                <button onClick={requestCards}>Deal Archetypes</button>
             </div>
             <Role />
             <Coordinates />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import socket from 'src/utils/socket';
 import { find } from 'lodash';
 
@@ -6,21 +6,21 @@ import { archetypesData } from 'src/data/archetypes.data';
 import ArchetypeClass from 'src/components/details/archetype/archetype.model';
 
 import './Archetype.scss';
+import { GameStore } from 'src/game-store';
 
 const Archetype = () => {
     const [playerArchetype, setArchetype] = useState<ArchetypeClass | undefined>(undefined);
+    const { gameState } = useContext(GameStore);
 
     useEffect(() => {
-        socket.on('dealtArchetype', (data: { archetype: string; role: string }) => {
-            const archetypeObj = find(archetypesData, (arc) => arc.id === data.archetype);
-            if (archetypeObj) {
-                const archetype = new ArchetypeClass(archetypeObj);
-                setArchetype(archetype);
-            } else {
-                setArchetype(undefined);
-            }
-        });
-    }, []);
+        const archetypeObj = find(archetypesData, (arc) => arc.id === gameState.player?.archetype);
+        if (archetypeObj) {
+            const archetype = new ArchetypeClass(archetypeObj);
+            setArchetype(archetype);
+        } else {
+            setArchetype(undefined);
+        }
+    }, [gameState.player?.archetype]);
 
     if (playerArchetype) {
         const { id, name, description, flavour, charges, turnType } = playerArchetype;

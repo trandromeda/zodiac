@@ -13,7 +13,7 @@ function PlayerName(props: Props) {
     const handleSubmit = (event: FormEvent) => {
         event.preventDefault();
         localStorage.setItem('uuid', props.playerUUID);
-        gameDispatch({ type: 'set-player', payload: { player: { name, playerUUID: props.playerUUID } } });
+        gameDispatch({ type: 'update-player', payload: { player: { name, playerUUID: props.playerUUID } } });
         socket.emit('joinGame', { name, playerUUID: props.playerUUID });
     };
 

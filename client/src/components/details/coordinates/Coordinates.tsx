@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import socket from 'src/utils/socket';
+import React, { useState, useEffect, useContext } from 'react';
 import { IMemoryHex } from 'src/utils/BoardUtils';
 
 import { EventsService } from 'src/utils/EventsService';
 
 import './Coordinates.scss';
+import { GameStore } from 'src/game-store';
 
 const Coordinates = () => {
     const [coordinates, setCoordinates] = useState<IMemoryHex[] | undefined>(undefined);
+    const { gameState } = useContext(GameStore);
+
     useEffect(() => {
-        socket.on('dealtArchetype', (data: { archetype: string; role: string; coordinates: IMemoryHex[] }) => {
-            if (data.coordinates) setCoordinates(data.coordinates);
-        });
-    }, []);
+        setCoordinates(gameState.player?.coordinates);
+    }, [gameState.player?.coordinates]);
 
     const handleMouseEnter = (coordinates: IMemoryHex[]) => {
         EventsService.highlightCoordinates(coordinates);
     };
 
-    if (coordinates) {
+    if (coordinates?.length) {
         return (
             <div className="coordinates">
                 Coordinates:{' '}
