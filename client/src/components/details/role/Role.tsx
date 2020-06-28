@@ -6,8 +6,8 @@ const Role = () => {
     const { gameState } = useContext(GameStore);
 
     useEffect(() => {
-        setRole(gameState.player?.role);
-    }, [gameState.player?.role]);
+        setRole(gameState.player.role);
+    }, [gameState.player.role]);
 
     return <div className="role">Role: {role}</div>;
 };

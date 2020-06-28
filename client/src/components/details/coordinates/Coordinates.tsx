@@ -11,8 +11,8 @@ const Coordinates = () => {
     const { gameState } = useContext(GameStore);
 
     useEffect(() => {
-        setCoordinates(gameState.player?.coordinates);
-    }, [gameState.player?.coordinates]);
+        setCoordinates(gameState.player.coordinates);
+    }, [gameState.player.coordinates]);
 
     const handleMouseEnter = (coordinates: IMemoryHex[]) => {
         EventsService.highlightCoordinates(coordinates);

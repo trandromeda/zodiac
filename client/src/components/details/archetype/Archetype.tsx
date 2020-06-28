@@ -13,14 +13,14 @@ const Archetype = () => {
     const { gameState } = useContext(GameStore);
 
     useEffect(() => {
-        const archetypeObj = find(archetypesData, (arc) => arc.id === gameState.player?.archetype);
+        const archetypeObj = find(archetypesData, (arc) => arc.id === gameState.player.archetype);
         if (archetypeObj) {
             const archetype = new ArchetypeClass(archetypeObj);
             setArchetype(archetype);
         } else {
             setArchetype(undefined);
         }
-    }, [gameState.player?.archetype]);
+    }, [gameState.player.archetype]);
 
     if (playerArchetype) {
         const { id, name, description, flavour, charges, turnType } = playerArchetype;
