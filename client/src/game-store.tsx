@@ -14,34 +14,40 @@ const initialState: InitialState = {
 };
 
 /** Reducer Actions */
-type Actions = 'next-stage' | 'restore-player' | 'update-player';
-type PlayerPayload = {
-    player: Player;
+type PlayerAction = {
+    type: 'restore-player' | 'update-player';
+    payload: {
+        player: Player;
+    };
 };
-type GameStagePayload = {
-    stage: Stage;
+type StageAction = {
+    type: 'next-stage';
+    payload: {
+        stage: Stage;
+    };
 };
-type Payload = PlayerPayload | GameStagePayload;
+
+type GameActions = PlayerAction | StageAction;
 
 /** Game Context */
 interface IGameContext {
     gameState: InitialState;
-    gameDispatch: React.Dispatch<{ type: Actions; payload: Payload }>;
+    gameDispatch: React.Dispatch<GameActions>;
 }
 const GameStore = createContext({} as IGameContext);
 
 // TODO: Split this into different child reducers if state grows too large
 const GameStoreProvider = ({ children }: any) => {
-    const [gameState, gameDispatch] = useReducer((state: InitialState, action: { type: Actions; payload: Payload }) => {
+    const [gameState, gameDispatch] = useReducer((state: InitialState, action: GameActions) => {
         switch (action.type) {
             case 'next-stage':
-                const nextStagePayload = action.payload as GameStagePayload;
+                const nextStagePayload = (action as StageAction).payload;
                 return { ...state, stage: nextStagePayload.stage };
             case 'restore-player':
-                const restorePlayerPayload = action.payload as PlayerPayload;
+                const restorePlayerPayload = (action as PlayerAction).payload;
                 return { ...state, player: restorePlayerPayload.player };
             case 'update-player':
-                const updatePlayerPayload = action.payload as PlayerPayload;
+                const updatePlayerPayload = (action as PlayerAction).payload;
                 return {
                     ...state,
                     player: {
