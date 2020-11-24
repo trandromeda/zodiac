@@ -11,19 +11,24 @@ export interface IMemoryHex extends IHex {
     memory?: string;
 }
 
+/**
+ * @params currentHex - represents the starting point from which to find new hexes
+ * @params existingHexes - hexes that are active and added to play. Has an upper limit
+ * @params hexagons - represents every hexagon on the board
+ */
 export class BoardUtils {
-    static getNextHex = (firstHex: IHex, existingHexes: IHex[], hexagons: IHex[]): IHex => {
-        const neighbours: IHex[] = HexUtils.neighbours(firstHex);
-        const neighbour: IHex = neighbours[Math.floor(Math.random() * neighbours.length)];
+    static getNextHex = (currentHex: IHex, existingHexes: IHex[], hexagons: IHex[]): IHex => {
+        const neighbours: IHex[] = HexUtils.neighbours(currentHex);
+        const randomAdjacentHex: IHex = neighbours[Math.floor(Math.random() * neighbours.length)];
 
-        const hexExists = hexagons.some((hexagon: IHex) => isEqual(hexagon, neighbour));
-        const hexIsNew = !existingHexes.some((hexagon: IHex) => isEqual(hexagon, neighbour));
+        const hexExists = hexagons.some((hexagon: IHex) => isEqual(hexagon, randomAdjacentHex));
+        const hexIsNew = !existingHexes.some((hexagon: IHex) => isEqual(hexagon, randomAdjacentHex));
 
-        const newNeighbours = HexUtils.neighbours(neighbour);
+        const newNeighbours = HexUtils.neighbours(randomAdjacentHex);
         const hexHasTwoNeighbours = existingHexes.length <= 6 ? true : intersectionWith(existingHexes, newNeighbours, isEqual).length >= 2;
 
         if (hexExists && hexIsNew && hexHasTwoNeighbours) {
-            return neighbour;
+            return randomAdjacentHex;
         } else {
             const randomHex = existingHexes[Math.floor(Math.random() * existingHexes.length)];
             return BoardUtils.getNextHex(randomHex, existingHexes, hexagons);
