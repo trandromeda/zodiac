@@ -14,7 +14,7 @@ const Coordinates = () => {
         setCoordinates(gameState.player.coordinates);
     }, [gameState.player.coordinates]);
 
-    const handleMouseEnter = (coordinates: IMemoryHex[]) => {
+    const handleClickCoordinates = (coordinates: IMemoryHex[]) => {
         EventsService.highlightCoordinates(coordinates);
     };
 
@@ -22,7 +22,7 @@ const Coordinates = () => {
         return (
             <div className="coordinates">
                 Coordinates:{' '}
-                <span onMouseDown={() => handleMouseEnter(coordinates)}>
+                <span onMouseDown={() => handleClickCoordinates(coordinates)}>
                     {coordinates[0].memory}, {coordinates[1].memory}
                 </span>
             </div>
