@@ -1,3 +1,4 @@
+import { update } from 'lodash';
 import React, { createContext, useReducer } from 'react';
 import { Player } from './models/player.model';
 
@@ -48,14 +49,15 @@ const GameStoreProvider = ({ children }: any) => {
                 const restorePlayerPayload = (action as PlayerAction).payload;
                 return { ...state, player: restorePlayerPayload.player };
             case 'update-player':
-                const updatePlayerPayload = (action as PlayerAction).payload;
-                return {
+                const updatePlayerPayload = (action as PlayerAction).payload.player;
+                const updatedPlayer = {
                     ...state,
                     player: {
                         ...state.player,
                         ...updatePlayerPayload,
                     },
                 };
+                return updatedPlayer;
             default:
                 throw new Error();
         }
