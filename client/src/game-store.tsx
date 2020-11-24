@@ -37,6 +37,7 @@ interface IGameContext {
 const GameStore = createContext({} as IGameContext);
 
 // TODO: Split this into different child reducers if state grows too large
+/** Context + useReducer is a state management alternative to Redux */
 const GameStoreProvider = ({ children }: any) => {
     const [gameState, gameDispatch] = useReducer((state: InitialState, action: GameActions) => {
         switch (action.type) {
