@@ -2,9 +2,12 @@
     "name": "zodiac-server",
     "version": "1.0.0",
     "description": "server",
-    "main": "index.js",
+    "main": "dist/server.js",
     "scripts": {
-        "start": "nodemon server.js",
+        "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+        "build": "tsc",
+        "prestart": "npm run build",
+        "start": "nodemon .",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "",
@@ -15,5 +18,13 @@
         "node-sass": "^4.14.1",
         "nodemon": "^2.0.3",
         "socket.io": "^2.3.0"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.6",
+        "@types/lodash": "^4.14.156",
+        "@types/node": "^14.0.13",
+        "@types/socket.io": "^2.1.8",
+        "tslint": "^6.1.2",
+        "typescript": "^3.9.5"
     }
 }

@@ -1,36 +1,63 @@
+import { update } from 'lodash';
 import React, { createContext, useReducer } from 'react';
+import { Player } from './models/player.model';
 
-type Stage = 'lobby' | 'labyrinth-creation' | 'assignments' | undefined;
+type Stage = 'lobby' | 'labyrinth-creation' | 'assignments';
+
+/** Reducer State */
 type InitialState = {
     stage: Stage;
-    playerName?: string;
+    player: Player;
 };
-type Payload = {
-    stage?: Stage;
-    playerName?: string;
-};
-
 const initialState: InitialState = {
     stage: 'lobby',
-    playerName: '',
+    player: { name: '', playerUUID: '', role: '', archetype: '', coordinates: [] },
 };
 
+/** Reducer Actions */
+type PlayerAction = {
+    type: 'restore-player' | 'update-player';
+    payload: {
+        player: Player;
+    };
+};
+type StageAction = {
+    type: 'next-stage';
+    payload: {
+        stage: Stage;
+    };
+};
+
+type GameActions = PlayerAction | StageAction;
+
+/** Game Context */
 interface IGameContext {
     gameState: InitialState;
-    gameDispatch: React.Dispatch<{ type: string; payload: Payload }>;
+    gameDispatch: React.Dispatch<GameActions>;
 }
-
 const GameStore = createContext({} as IGameContext);
 
+// TODO: Split this into different child reducers if state grows too large
+/** Context + useReducer is a state management alternative to Redux */
 const GameStoreProvider = ({ children }: any) => {
-    const [gameState, gameDispatch] = useReducer((state: InitialState, action: { type: string; payload: Payload }) => {
+    const [gameState, gameDispatch] = useReducer((state: InitialState, action: GameActions) => {
         switch (action.type) {
             case 'next-stage':
-                const stage = action.payload.stage;
-                return { ...state, stage };
-            case 'set-player':
-                const playerName = action.payload.playerName;
-                return { ...state, playerName };
+                const nextStagePayload = (action as StageAction).payload;
+                return { ...state, stage: nextStagePayload.stage };
+            case 'restore-player':
+                const restorePlayerPayload = (action as PlayerAction).payload;
+                return { ...state, player: restorePlayerPayload.player };
+            case 'update-player':
+                const updatePlayerPayload = (action as PlayerAction).payload.player;
+                const updatedPlayer = {
+                    ...state,
+                    player: {
+                        ...state.player,
+                        ...updatePlayerPayload,
+                    },
+                };
+                return updatedPlayer;
             default:
                 throw new Error();
         }

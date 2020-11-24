@@ -1,6 +1,7 @@
 import { useReducer } from 'react';
 import { filter, cloneDeep, difference } from 'lodash';
 import { Hex, GridGenerator } from '@trandromeda/react-hexgrid';
+import socket from 'src/utils/socket';
 
 import { IHex, IMemoryHex, BoardUtils } from 'src/utils/BoardUtils';
 import { memories } from 'src/data/memories.data';
@@ -13,11 +14,12 @@ type State = {
 };
 
 interface Action {
-    type: 'reset-memories' | 'add-memories-to-hexes' | 'add-hex-with-memory' | 'remove-hex-with-memory';
+    type: 'reset-memories' | 'add-memories-to-hexes' | 'add-hex-with-memory' | 'remove-hex-with-memory' | 'sync-hexes-with-memories';
     payload?: {
         memory?: string;
         hex?: IMemoryHex;
         numberOfMemories?: number;
+        hexes?: IMemoryHex[];
     };
 }
 
@@ -63,6 +65,8 @@ function boardReducer(state: State, action: Action) {
                 };
             });
 
+            socket.emit('newLabyrinth', hexesWithMemories);
+
             return { ...state, hexesWithMemories };
 
         case 'add-hex-with-memory':
@@ -73,9 +77,13 @@ function boardReducer(state: State, action: Action) {
                 memory,
             };
 
+            const updatedHexes = [...state.hexesWithMemories, hexWithMemory];
+
+            socket.emit('newLabyrinth', updatedHexes);
+
             return {
                 ...state,
-                hexesWithMemories: [...state.hexesWithMemories, hexWithMemory],
+                hexesWithMemories: updatedHexes,
             };
         case 'remove-hex-with-memory':
             const filteredHexes = filter(state.hexesWithMemories, (hex: IMemoryHex) => {
@@ -85,7 +93,17 @@ function boardReducer(state: State, action: Action) {
 
                 return true;
             });
+
+            socket.emit('newLabyrinth', filteredHexes);
+
             return { ...state, hexesWithMemories: filteredHexes };
+        case 'sync-hexes-with-memories':
+            const hexes = action.payload?.hexes;
+            if (hexes) {
+                return { ...state, hexesWithMemories: hexes };
+            } else {
+                return state;
+            }
         default:
             return state;
     }

@@ -1,17 +1,43 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HexGrid, Layout, Hexagon, Text } from '@trandromeda/react-hexgrid';
 import { find } from 'lodash';
+import { debounceTime, tap } from 'rxjs/operators';
 
 import { useBoardReducer } from 'src/components/board/board-reducer';
 import { IHex, IMemoryHex } from 'src/utils/BoardUtils';
 
 import './Board.scss';
+import socket from 'src/utils/socket';
+
+import { EventsService } from 'src/utils/EventsService';
 
 function Board() {
     const [state, dispatch] = useBoardReducer();
+    const [highlightedCoordinates, setHighlightedCoordinates] = useState<IMemoryHex[] | undefined>(undefined);
 
-    // for debugging
-    // useEffect(() => console.log(state));
+    useEffect(() => {
+        const syncHexesWithMemories = (hexes: IMemoryHex[]) => dispatch({ type: 'sync-hexes-with-memories', payload: { hexes } });
+        socket.on('newLabyrinth', syncHexesWithMemories);
+        return () => {
+            socket.off('newLabyrinth', syncHexesWithMemories);
+        };
+    }, [dispatch]);
+
+    useEffect(() => {
+        const subscription = EventsService.onHighlightCoordinates()
+            .pipe(
+                tap((res) => setHighlightedCoordinates(res)),
+                debounceTime(2500)
+            )
+            .subscribe(() => {
+                console.log('hovering');
+                setHighlightedCoordinates(undefined);
+            });
+
+        return () => {
+            subscription.unsubscribe();
+        };
+    }, []);
 
     /** The outcome of handleClick will depend on game state */
     const handleClick = (event: MouseEvent, hexagon: any) => {
@@ -45,6 +71,11 @@ function Board() {
                                 state.hexesWithMemories,
                                 (memoryHex: IMemoryHex) => memoryHex.q === hex.q && memoryHex.r === hex.r
                             );
+                            const highlightedHex = find(
+                                highlightedCoordinates,
+                                (coord: IMemoryHex) => coord?.q === hex.q && coord?.r === hex.r
+                            );
+
                             return (
                                 <Hexagon
                                     key={i}
@@ -53,7 +84,7 @@ function Board() {
                                     s={hex.s}
                                     onClick={handleClick}
                                     memory={memoryHex?.memory}
-                                    className={`${memoryHex ? 'highlight' : ''}`}
+                                    className={`${memoryHex ? 'highlight' : ''} ${highlightedHex ? 'hover-highlight' : ''}`}
                                 >
                                     <Text>{memoryHex?.memory}</Text>
                                 </Hexagon>
