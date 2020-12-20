@@ -5,7 +5,7 @@ import socket from 'src/utils/socket';
 
 import { IHex, IMemoryHex, BoardUtils } from 'src/utils/BoardUtils';
 import { memories } from 'src/data/memories.data';
-const hexagons = GridGenerator.asymHexagon(3);
+const hexagons = GridGenerator.triangle(9);
 
 type State = {
     hexesWithMemories: Array<IMemoryHex>;
